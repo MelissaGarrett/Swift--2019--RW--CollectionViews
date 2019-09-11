@@ -14,6 +14,15 @@ class ViewController: UIViewController {
     
     var collectionData = ["1 🍎", "2 🍊", "3 🥨", "4 🌭", "5 🍔", "6 🌮",
                           "7 🍟", "8 🍕", "9 🧁", "10 🍪", "11 🍷", "12 🥃"]
+    
+    // Add new item to model FIRST, then update CollectionView
+    @IBAction func addItem() {
+        let text = "\(collectionData.count + 1) 🍦"
+        collectionData.append(text)
+        
+        let indexPath = IndexPath(row: collectionData.count - 1, section: 0)
+        collectionView.insertItems(at: [indexPath])
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +33,17 @@ class ViewController: UIViewController {
         let width = (view.frame.size.width - 20) / 3
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.itemSize = CGSize(width: width, height: width)
+        
+        // Unimportant...
+        // Pull down on the VC to automatically add a new item
+        let refresh = UIRefreshControl()
+        refresh.addTarget(self, action: #selector(self.refresh), for: .valueChanged)
+        collectionView.refreshControl = refresh
+    }
+    
+    @objc func refresh() {
+        addItem()
+        collectionView.refreshControl?.endRefreshing()
     }
 
 }
