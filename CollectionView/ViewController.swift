@@ -43,10 +43,21 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
         return cell
     }
     
+    // To manually segue to 2nd VC
+    // The segue is from the 1st VC itself (yellow icon) to 2nd VC
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let selectedItem = collectionData[indexPath.row]
-        
-        print ("Selected: \(selectedItem)")
+            performSegue(withIdentifier: "DetailSegue", sender: indexPath)
+    }
+    
+    // To automatically segue to 2nd VC
+    // The segue is from the CollectionViewCell to 2nd VC
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "DetailSegue" {
+            if let vc = segue.destination as? DetailViewController,
+                let index = sender as? IndexPath {
+                vc.selection = collectionData[index.row]
+            }
+        }
     }
 }
 
